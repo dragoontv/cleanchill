@@ -2,6 +2,12 @@
 
 # dependencies
 /node_modules
+.next/
+out/
+dist/
+.env
+.env.local
+.env.*.local
 /.pnp
 .pnp.*
 .yarn/*
@@ -9,6 +15,14 @@
 !.yarn/plugins
 !.yarn/releases
 !.yarn/versions
+
+# IDEs
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
 
 # testing
 /coverage
