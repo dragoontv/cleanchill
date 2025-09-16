@@ -1,13 +1,18 @@
 "use client";
 
-import { useState } from "react";
-import { supabase } from "@/lib/supabaseClient";
+import { useState, useEffect } from "react";
+import { getSupabaseClient } from "../lib/supabaseClient";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const [supabase, setSupabase] = useState(null);
+
+  useEffect(() => {
+    setSupabase(getSupabaseClient());
+  }, []);
 
   // Handle login
   const handleLogin = async (e) => {
@@ -16,11 +21,10 @@ export default function LoginPage() {
     setMessage("");
 
     if (!supabase) {
-      setMessage("⚠️ Supabase not configured (UI only mode).")
+      setMessage("⚠️ Supabase not configured. Please check your environment variables.");
       setLoading(false);
       return;
     }
-    
 
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
@@ -42,12 +46,11 @@ export default function LoginPage() {
     e.preventDefault();
     setLoading(true);
     setMessage("");
-
-    if (error) {
-      setMessage(error.message);
-    } else {
-      setMessage("✅ Login successful!");
-      console.log("User:", data.user);
+    
+    if (!supabase) {
+      setMessage("⚠️ Supabase not configured. Please check your environment variables.");
+      setLoading(false);
+      return;
     }
 
     const { data, error } = await supabase.auth.signUp({
@@ -57,7 +60,7 @@ export default function LoginPage() {
 
     if (error) {
       setMessage(error.message);
-    } else {  
+    } else {
       setMessage("✅ Signup successful! Check your email.");
       console.log("User:", data.user);
     }
