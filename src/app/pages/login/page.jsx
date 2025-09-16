@@ -15,6 +15,13 @@ export default function LoginPage() {
     setLoading(true);
     setMessage("");
 
+    if (!supabase) {
+      setMessage("⚠️ Supabase not configured (UI only mode).")
+      setLoading(false);
+      return;
+    }
+    
+
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -36,6 +43,13 @@ export default function LoginPage() {
     setLoading(true);
     setMessage("");
 
+    if (error) {
+      setMessage(error.message);
+    } else {
+      setMessage("✅ Login successful!");
+      console.log("User:", data.user);
+    }
+
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -43,7 +57,7 @@ export default function LoginPage() {
 
     if (error) {
       setMessage(error.message);
-    } else {
+    } else {  
       setMessage("✅ Signup successful! Check your email.");
       console.log("User:", data.user);
     }
