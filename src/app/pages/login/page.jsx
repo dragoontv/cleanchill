@@ -1,13 +1,19 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { supabase} from "@/lib/supabaseClient";
+import { getSupabaseClient } from "@/lib/supabaseClient";
 
 export default function LoginPage() {
+  const [supabase, setSupabase] = useState(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+
+  //Supabase Handler
+  useEffect( () => {
+    setSupabase(getSupabaseClient());
+  }, []);
 
   // Handle login
   const handleLogin = async (e) => {
